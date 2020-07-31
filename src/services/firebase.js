@@ -9,6 +9,7 @@ import firebaseConfig from './firebaseconfig';
 var app = firebase.initializeApp(firebaseConfig);
 
 
+
 const bl = {
     createUser: async function(user){
         return firebase.auth().createUserWithEmailAndPassword(user.email, user.password).then(res => {
