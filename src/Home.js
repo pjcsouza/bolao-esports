@@ -1,9 +1,15 @@
-import React, {useEffect}  from 'react';
+import React, {useEffect, useState}  from 'react';
+import NavbarHome from './components/Navbar';
+import CardMatch from './components/CardMatch';
+import _ from 'lodash'
 const axios = require('axios');
-
 const access_token = 'NStrn8s0lmAn6EFOKn4jD4r8-VVmkf_FOAXlUIC3r1KJ4fIgI4I';
+
+
 function Home() {
+  const [loading,setLoading] = useState(mt);
   var mt = localStorage.getItem("matches")
+  var teams = localStorage.getItem("teams")
 
   useEffect(()=>{
     if(!mt){
@@ -25,8 +31,9 @@ function Home() {
             }
             mt.push(d);
         }) 
-        console.log(mt)
+        localStorage.setItem("teams", JSON.stringify(res.data.teams));
         localStorage.setItem("matches", JSON.stringify(mt));
+        setLoading(false)
       }).catch(err=>{
         console.log(err)
       })
@@ -37,7 +44,16 @@ function Home() {
   },[]);
 
 
-  return <h1>Home</h1>;
+  return (
+  <div className = "home-body">
+    <NavbarHome/>
+    {loading? 
+    <h1>Carregando</h1>:
+    _.map(JSON.parse(mt),(match,index)=>(
+    <CardMatch number = {index} data = {match}/>
+  ))}
+    
+  </div>);
 }
 
 export default Home;
